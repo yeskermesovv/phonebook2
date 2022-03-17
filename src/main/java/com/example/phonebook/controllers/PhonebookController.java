@@ -5,6 +5,10 @@ import com.example.phonebook.models.User;
 import com.example.phonebook.repositories.ContactRepository;
 import com.example.phonebook.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -38,8 +42,10 @@ public class PhonebookController {
 
 
     @GetMapping("/contacts")
-    public List<Contact> getContacts() {
-        return (List<Contact>) contactRepository.findAll();
+    public Page<Contact> getContacts(
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return contactRepository.findAll(pageable);
     }
 
     @PostMapping("/contacts")
